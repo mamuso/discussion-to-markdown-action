@@ -2,7 +2,7 @@
   "name": "actions-discussion-to-markdown",
   "version": "0.0.1",
   "private": false,
-  "description": "Grab a discussion from a GitHub repo and return the content as markdown",
+  "description": "Grab a GitHub discussion URL and return the contents as markdown",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
