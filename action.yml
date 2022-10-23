@@ -2,9 +2,11 @@ name: 'actions-discussion-to-markdown'
 description: 'Grab a GitHub discussion URL and return the contents as markdown'
 author: 'mamuso <mamuso@mamuso.net>'
 inputs:
-  discussion_url:
+  discussion-url:
     required: true
     description: 'Discussion URL'
+  include-replies:
+    description: 'Include replies'
 runs:
   using: 'node16'
   main: 'dist/index.js'
