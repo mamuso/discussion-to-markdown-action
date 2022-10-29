@@ -68,6 +68,7 @@ function run() {
       }
     `;
             console.log(query);
+            console.log('---');
             const data = yield graphqlWithAuth(query, {
                 owner,
                 repo,

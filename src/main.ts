@@ -30,6 +30,8 @@ async function run(): Promise<void> {
       }
     `
     console.log(query)
+    console.log('---')
+
     const data = await graphqlWithAuth(query, {
       owner,
       repo,
