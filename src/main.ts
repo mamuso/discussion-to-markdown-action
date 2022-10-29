@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import core from '@actions/core'
+import * as core from '@actions/core'
 import {graphql} from '@octokit/graphql'
 
 const discussion_url = core.getInput('discussion-url', {required: true})
