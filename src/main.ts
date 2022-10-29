@@ -78,6 +78,7 @@ async function run(): Promise<void> {
         md += `---\n\n`
       }
     }
+    md += `[Discussion link](${discussion_url})`
 
     // Deliver the output
     core.setOutput('markdown', md)

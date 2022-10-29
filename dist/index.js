@@ -112,6 +112,7 @@ function run() {
                     md += `---\n\n`;
                 }
             }
+            md += `[Discussion link](${discussion_url})`;
             // Deliver the output
             core.setOutput('markdown', md);
             core.summary.addRaw(md).write();
