@@ -18,6 +18,7 @@ async function run(): Promise<void> {
     console.log(graphqlWithAuth)
     console.log(discussion_url)
     console.log(include_replies)
+    console.log(token)
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }
