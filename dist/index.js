@@ -96,7 +96,13 @@ function run() {
                 repo,
                 discussion_number
             });
-            console.log(data);
+            const discussion = data.repository.discussion;
+            // shape the markdown
+            let md = `# ${discussion.title}\n`;
+            md += `from ${discussion.author.login} on ${discussion.createdAt}\n\n`;
+            md += `${discussion.body}\n\n`;
+            md += `---\n\n`;
+            console.log(md);
         }
         catch (error) {
             if (error instanceof Error)
