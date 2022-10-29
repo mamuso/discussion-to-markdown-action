@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import * as core from '@actions/core'
 import {graphql} from '@octokit/graphql'
 import {NodeHtmlMarkdown} from 'node-html-markdown'
@@ -67,7 +66,6 @@ async function run(): Promise<void> {
     let md = `# ${discussion.title}\n`
     md += `from ${discussion.author.login} on ${discussion.createdAt}\n\n`
     md += `${NodeHtmlMarkdown.translate(discussion.bodyHTML)}\n\n`
-    md += `---\n`
     md += `---\n\n`
 
     for (const comment of discussion.comments.nodes) {
@@ -81,7 +79,9 @@ async function run(): Promise<void> {
       }
     }
 
-    console.log(md)
+    // Deliver the output
+    core.setOutput('markdown', md)
+    core.summary.addRaw(md)
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }

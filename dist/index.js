@@ -39,7 +39,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-/* eslint-disable no-console */
 const core = __importStar(__nccwpck_require__(2186));
 const graphql_1 = __nccwpck_require__(8467);
 const node_html_markdown_1 = __nccwpck_require__(2421);
@@ -102,7 +101,6 @@ function run() {
             let md = `# ${discussion.title}\n`;
             md += `from ${discussion.author.login} on ${discussion.createdAt}\n\n`;
             md += `${node_html_markdown_1.NodeHtmlMarkdown.translate(discussion.bodyHTML)}\n\n`;
-            md += `---\n`;
             md += `---\n\n`;
             for (const comment of discussion.comments.nodes) {
                 md += `## ${comment.author.login} on ${comment.createdAt}\n\n`;
@@ -114,7 +112,9 @@ function run() {
                     md += `---\n\n`;
                 }
             }
-            console.log(md);
+            // Deliver the output
+            core.setOutput('markdown', md);
+            core.summary.addRaw(md);
         }
         catch (error) {
             if (error instanceof Error)

@@ -8,6 +8,9 @@ inputs:
   token:
     required: true
     description: 'Token to authenticate with GitHub'
+outputs:
+  markdown:
+    description: 'Markdown content of the discussion'
 runs:
   using: 'node16'
   main: 'dist/index.js'
