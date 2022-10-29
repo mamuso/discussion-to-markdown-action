@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import * as core from '@actions/core'
 import {graphql} from '@octokit/graphql'
+import {NodeHtmlMarkdown} from 'node-html-markdown'
 import type {GraphQlQueryResponseData} from '@octokit/graphql'
 
 const discussion_url = core.getInput('discussion-url', {required: true})
@@ -65,20 +66,19 @@ async function run(): Promise<void> {
     // shape the markdown
     let md = `# ${discussion.title}\n`
     md += `from ${discussion.author.login} on ${discussion.createdAt}\n\n`
-    md += `${discussion.body}\n\n`
-    md += `---\n\n`
+    md += `${NodeHtmlMarkdown.translate(discussion.body)}\n\n`
+    md += `---\n`
     md += `---\n\n`
 
     for (const comment of discussion.comments.nodes) {
       md += `## ${comment.author.login} on ${comment.createdAt}\n\n`
-      md += `${comment.body}\n\n`
+      md += `${NodeHtmlMarkdown.translate(comment.body)}\n\n`
       md += `---\n\n`
       for (const replies of comment.replies.nodes) {
         md += `### ${replies.author.login} on ${replies.createdAt}\n\n`
-        md += `${replies.body}\n\n`
+        md += `${NodeHtmlMarkdown.translate(replies.body)}\n\n`
         md += `---\n\n`
       }
-      md += `---\n\n`
     }
 
     console.log(md)

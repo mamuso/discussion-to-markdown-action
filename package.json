@@ -27,7 +27,9 @@
   "dependencies": {
     "@actions/core": "^1.10.0",
     "@octokit/graphql": "^5.0.4",
-    "@vercel/ncc": "^0.34.0"
+    "@vercel/ncc": "^0.34.0",
+    "add": "^2.0.6",
+    "node-html-markdown": "^1.2.2"
   },
   "devDependencies": {
     "@types/node": "^18.11.3",
