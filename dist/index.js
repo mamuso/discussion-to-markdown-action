@@ -53,10 +53,32 @@ const graphqlWithAuth = graphql_1.graphql.defaults({
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            // const octokit = github.getOctokit(token)
-            console.log(graphqlWithAuth);
-            console.log(discussion_url);
             console.log(include_replies);
+            const url = new URL(discussion_url);
+            const [, owner, repo, discussion_number] = url.pathname.split('/');
+            const query = `
+      query ($owner: String!, $repo: String!, $discussion_number: Int!, $include_replies: Boolean!) {
+        repository(owner: $owner, name: $repo) {
+          discussion(number: $discussion_number) {
+            comments(first: 100, orderBy: {field: CREATED_AT, direction: ASC}, includeReplies: $include_replies) {
+              nodes {
+                body
+              }
+            }
+          }
+        }
+      }
+    `;
+            const data = yield graphqlWithAuth(query, {
+                owner,
+                repo,
+                discussion_number,
+                include_replies
+            });
+            // const comments = repository.discussion.comments.nodes.map(
+            //   (node: any) => node.body
+            // )
+            console.log(data);
         }
         catch (error) {
             if (error instanceof Error)
