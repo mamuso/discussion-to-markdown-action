@@ -58,10 +58,10 @@ function run() {
       query ($owner: String!, $repo: String!, $discussion_number: Int!) {
         repository(owner: $owner, name: $repo) {
           discussion(number: $discussion_number) {
-            comments(first: 200}) {
+            comments(first: 100}) {
               nodes {
                 body
-                replies(first: 200) {
+                replies(first: 100) {
                   nodes {
                     body
                   }
