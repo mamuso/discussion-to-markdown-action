@@ -114,7 +114,7 @@ function run() {
             }
             // Deliver the output
             core.setOutput('markdown', md);
-            core.summary.addRaw(md);
+            core.summary.addRaw(md).write();
         }
         catch (error) {
             if (error instanceof Error)

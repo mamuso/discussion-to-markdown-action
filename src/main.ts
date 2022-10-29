@@ -81,7 +81,7 @@ async function run(): Promise<void> {
 
     // Deliver the output
     core.setOutput('markdown', md)
-    core.summary.addRaw(md)
+    core.summary.addRaw(md).write()
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }
