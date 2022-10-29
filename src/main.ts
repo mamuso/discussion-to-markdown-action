@@ -27,7 +27,7 @@ async function run(): Promise<void> {
             id
             title
             createdAt
-            body
+            bodyHTML
             author {
               login
             }
@@ -35,7 +35,7 @@ async function run(): Promise<void> {
               nodes {
                 id
                 createdAt
-                body
+                bodyHTML
                 author {
                   login
                 }
@@ -43,7 +43,7 @@ async function run(): Promise<void> {
                   nodes {
                     id
                     createdAt
-                    body
+                    bodyHTML
                     author {
                       login
                     }
@@ -66,17 +66,17 @@ async function run(): Promise<void> {
     // shape the markdown
     let md = `# ${discussion.title}\n`
     md += `from ${discussion.author.login} on ${discussion.createdAt}\n\n`
-    md += `${NodeHtmlMarkdown.translate(discussion.body)}\n\n`
+    md += `${NodeHtmlMarkdown.translate(discussion.bodyHTML)}\n\n`
     md += `---\n`
     md += `---\n\n`
 
     for (const comment of discussion.comments.nodes) {
       md += `## ${comment.author.login} on ${comment.createdAt}\n\n`
-      md += `${NodeHtmlMarkdown.translate(comment.body)}\n\n`
+      md += `${NodeHtmlMarkdown.translate(comment.bodyHTML)}\n\n`
       md += `---\n\n`
       for (const replies of comment.replies.nodes) {
         md += `### ${replies.author.login} on ${replies.createdAt}\n\n`
-        md += `${NodeHtmlMarkdown.translate(replies.body)}\n\n`
+        md += `${NodeHtmlMarkdown.translate(replies.bodyHTML)}\n\n`
         md += `---\n\n`
       }
     }

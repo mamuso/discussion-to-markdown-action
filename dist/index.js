@@ -64,7 +64,7 @@ function run() {
             id
             title
             createdAt
-            body
+            bodyHTML
             author {
               login
             }
@@ -72,7 +72,7 @@ function run() {
               nodes {
                 id
                 createdAt
-                body
+                bodyHTML
                 author {
                   login
                 }
@@ -80,7 +80,7 @@ function run() {
                   nodes {
                     id
                     createdAt
-                    body
+                    bodyHTML
                     author {
                       login
                     }
@@ -101,16 +101,16 @@ function run() {
             // shape the markdown
             let md = `# ${discussion.title}\n`;
             md += `from ${discussion.author.login} on ${discussion.createdAt}\n\n`;
-            md += `${node_html_markdown_1.NodeHtmlMarkdown.translate(discussion.body)}\n\n`;
+            md += `${node_html_markdown_1.NodeHtmlMarkdown.translate(discussion.bodyHTML)}\n\n`;
             md += `---\n`;
             md += `---\n\n`;
             for (const comment of discussion.comments.nodes) {
                 md += `## ${comment.author.login} on ${comment.createdAt}\n\n`;
-                md += `${node_html_markdown_1.NodeHtmlMarkdown.translate(comment.body)}\n\n`;
+                md += `${node_html_markdown_1.NodeHtmlMarkdown.translate(comment.bodyHTML)}\n\n`;
                 md += `---\n\n`;
                 for (const replies of comment.replies.nodes) {
                     md += `### ${replies.author.login} on ${replies.createdAt}\n\n`;
-                    md += `${node_html_markdown_1.NodeHtmlMarkdown.translate(replies.body)}\n\n`;
+                    md += `${node_html_markdown_1.NodeHtmlMarkdown.translate(replies.bodyHTML)}\n\n`;
                     md += `---\n\n`;
                 }
             }
