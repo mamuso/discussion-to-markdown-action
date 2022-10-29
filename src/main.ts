@@ -16,7 +16,7 @@ async function run(): Promise<void> {
     const url = new URL(discussion_url)
     const [, owner, repo, , discussion_number] = url.pathname.split('/')
     console.log(discussion_number)
-    const discussion_number_int = parseInt(discussion_number, 10)
+    const discussion_number_int: number = parseInt(discussion_number, 10)
     console.log(discussion_number_int)
     const query = `
       query ($owner: String!, $repo: String!, $discussion_number: Int!) {
