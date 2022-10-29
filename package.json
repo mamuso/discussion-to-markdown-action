@@ -2,7 +2,7 @@
   "name": "actions-discussion-to-markdown",
   "version": "0.0.1",
   "private": false,
-  "description": "Grab a discussion from a GitHub repo and return the content as markdown",
+  "description": "Grab a GitHub discussion URL and return the contents as markdown",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -25,7 +25,11 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.10.0"
+    "@actions/core": "^1.10.0",
+    "@octokit/graphql": "^5.0.4",
+    "@vercel/ncc": "^0.34.0",
+    "add": "^2.0.6",
+    "node-html-markdown": "^1.2.2"
   },
   "devDependencies": {
     "@types/node": "^18.11.3",

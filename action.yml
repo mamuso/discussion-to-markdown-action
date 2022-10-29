@@ -1,11 +1,16 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'actions-discussion-to-markdown'
+description: 'Grab a GitHub discussion URL and return the contents as markdown'
+author: 'mamuso <mamuso@mamuso.net>'
 inputs:
-  milliseconds: # change this
+  discussion-url:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'Discussion URL'
+  token:
+    required: true
+    description: 'Token to authenticate with GitHub'
+outputs:
+  markdown:
+    description: 'Markdown content of the discussion'
 runs:
   using: 'node16'
   main: 'dist/index.js'
