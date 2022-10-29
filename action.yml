@@ -5,8 +5,6 @@ inputs:
   discussion-url:
     required: true
     description: 'Discussion URL'
-  include-replies:
-    description: 'Include replies'
   token:
     required: true
     description: 'Token to authenticate with GitHub'

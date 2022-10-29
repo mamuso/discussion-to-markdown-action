@@ -43,7 +43,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const graphql_1 = __nccwpck_require__(8467);
 const discussion_url = core.getInput('discussion-url', { required: true });
-const include_replies = core.getInput('include-replies');
 const token = core.getInput('token', { required: true });
 const graphqlWithAuth = graphql_1.graphql.defaults({
     headers: {
@@ -53,16 +52,20 @@ const graphqlWithAuth = graphql_1.graphql.defaults({
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            console.log(include_replies);
             const url = new URL(discussion_url);
             const [, owner, repo, discussion_number] = url.pathname.split('/');
             const query = `
-      query ($owner: String!, $repo: String!, $discussion_number: Int!, $include_replies: Boolean!) {
+      query ($owner: String!, $repo: String!, $discussion_number: Int!) {
         repository(owner: $owner, name: $repo) {
           discussion(number: $discussion_number) {
-            comments(first: 100, orderBy: {field: CREATED_AT, direction: ASC}, includeReplies: $include_replies) {
+            comments(first: 200}) {
               nodes {
                 body
+                replies(first: 200) {
+                  nodes {
+                    body
+                  }
+                }
               }
             }
           }
@@ -72,12 +75,8 @@ function run() {
             const data = yield graphqlWithAuth(query, {
                 owner,
                 repo,
-                discussion_number,
-                include_replies
+                discussion_number
             });
-            // const comments = repository.discussion.comments.nodes.map(
-            //   (node: any) => node.body
-            // )
             console.log(data);
         }
         catch (error) {
