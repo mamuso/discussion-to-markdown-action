@@ -18,6 +18,8 @@ async function run(): Promise<void> {
     console.log(discussion_number)
     const discussion_number_int: number = parseInt(discussion_number, 10)
     console.log(discussion_number_int)
+    console.log(typeof discussion_number_int)
+
     const query = `
       query ($owner: String!, $repo: String!, $discussion_number: Int!) {
         repository(owner: $owner, name: $repo) {
