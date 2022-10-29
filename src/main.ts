@@ -15,10 +15,7 @@ async function run(): Promise<void> {
   try {
     const url = new URL(discussion_url)
     const [, owner, repo, , discussion_number] = url.pathname.split('/')
-    console.log(discussion_number)
     const discussion_number_int: number = parseInt(discussion_number, 10)
-    console.log(discussion_number_int)
-    console.log(typeof discussion_number_int)
 
     const query = `
       query ($owner: String!, $repo: String!, $discussion_number: Int!) {
@@ -32,6 +29,7 @@ async function run(): Promise<void> {
         }
       }
     `
+    console.log(query)
     const data = await graphqlWithAuth(query, {
       owner,
       repo,
