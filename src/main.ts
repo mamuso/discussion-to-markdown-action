@@ -14,9 +14,9 @@ const graphqlWithAuth = graphql.defaults({
 async function run(): Promise<void> {
   try {
     const url = new URL(discussion_url)
-    const [, owner, repo, discussion_number] = url.pathname.split('/')
+    const [, owner, repo] = url.pathname.split('/')
     const query = `
-      query ($owner: String!, $repo: String!, $discussion_number: Int!) {
+      query ($owner: String!, $repo: String!) {
         repository(owner: $owner, name: $repo) {
           id
         }
@@ -24,8 +24,7 @@ async function run(): Promise<void> {
     `
     const data = await graphqlWithAuth(query, {
       owner,
-      repo,
-      discussion_number
+      repo
     })
     console.log(data)
   } catch (error) {
