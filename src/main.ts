@@ -1,16 +1,23 @@
-import * as core from '@actions/core'
-import {wait} from './wait'
+/* eslint-disable no-console */
+import core from '@actions/core'
+import {graphql} from '@octokit/graphql'
+
+const discussion_url = core.getInput('discussion-url', {required: true})
+const include_replies = core.getInput('include-replies')
+const token = core.getInput('token', {required: true})
+
+const graphqlWithAuth = graphql.defaults({
+  headers: {
+    authorization: `token ${token}`
+  }
+})
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
-
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
-
-    core.setOutput('time', new Date().toTimeString())
+    // const octokit = github.getOctokit(token)
+    console.log(graphqlWithAuth)
+    console.log(discussion_url)
+    console.log(include_replies)
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }
