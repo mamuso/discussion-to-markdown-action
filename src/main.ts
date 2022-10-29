@@ -24,13 +24,35 @@ async function run(): Promise<void> {
           discussion(number: $discussion_number) {
             id
             title
+            createdAt
             body
+            author {
+              login
+            }
+            comments(first: 100) {
+              nodes {
+                id
+                createdAt
+                body
+                author {
+                  login
+                }
+                replies(first: 100) {
+                  nodes {
+                    id
+                    createdAt
+                    body
+                    author {
+                      login
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     `
-    console.log(query)
-    console.log('---')
 
     const data = await graphqlWithAuth(query, {
       owner,
