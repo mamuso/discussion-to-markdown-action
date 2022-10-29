@@ -102,6 +102,18 @@ function run() {
             md += `from ${discussion.author.login} on ${discussion.createdAt}\n\n`;
             md += `${discussion.body}\n\n`;
             md += `---\n\n`;
+            md += `---\n\n`;
+            for (const comment of discussion.comments.nodes) {
+                md += `## ${comment.author.login} on ${comment.createdAt}\n\n`;
+                md += `${comment.body}\n\n`;
+                md += `---\n\n`;
+                for (const replies of comment.replies.nodes) {
+                    md += `### ${replies.author.login} on ${replies.createdAt}\n\n`;
+                    md += `${replies.body}\n\n`;
+                    md += `---\n\n`;
+                }
+                md += `---\n\n`;
+            }
             console.log(md);
         }
         catch (error) {
