@@ -53,8 +53,8 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const url = new URL(discussion_url);
-            const [, owner, repo, , discussion_number] = url.pathname.split('/');
-            const discussion_number_int = parseInt(discussion_number, 10);
+            const [, owner, repo, , id] = url.pathname.split('/');
+            const discussion_number = parseInt(id, 10);
             const query = `
       query ($owner: String!, $repo: String!, $discussion_number: Int!) {
         repository(owner: $owner, name: $repo) {
@@ -72,7 +72,7 @@ function run() {
             const data = yield graphqlWithAuth(query, {
                 owner,
                 repo,
-                discussion_number_int
+                discussion_number
             });
             console.log(data);
         }
