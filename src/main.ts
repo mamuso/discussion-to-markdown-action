@@ -18,18 +18,7 @@ async function run(): Promise<void> {
     const query = `
       query ($owner: String!, $repo: String!, $discussion_number: Int!) {
         repository(owner: $owner, name: $repo) {
-          discussion(number: $discussion_number) {
-            comments(first: 100}) {
-              nodes {
-                body
-                replies(first: 100) {
-                  nodes {
-                    body
-                  }
-                }
-              }
-            }
-          }
+          id
         }
       }
     `
