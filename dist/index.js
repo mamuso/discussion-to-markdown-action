@@ -29,15 +29,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 //
 //  discussion-to-markdown.ts
@@ -81,19 +72,18 @@ class discussionToMarkdown {
     }
     // Get the discussion's content
     getDiscussionContent(url) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const owner = url.owner;
-            const repo = url.repo;
-            const id = url.id;
-            // Initiazlize the GraphQL client
-            const graphqlWithAuth = graphql_1.graphql.defaults({
-                headers: {
-                    authorization: `token ${this.token}`
-                }
-            });
-            // Query to get discussion's content
-            // https://docs.github.com/en/graphql/overview/explorer
-            const graphqlQuery = `
+        const owner = url.owner;
+        const repo = url.repo;
+        const id = url.id;
+        // Initiazlize the GraphQL client
+        const graphqlWithAuth = graphql_1.graphql.defaults({
+            headers: {
+                authorization: `token ${this.token}`
+            }
+        });
+        // Query to get discussion's content
+        // https://docs.github.com/en/graphql/overview/explorer
+        const graphqlQuery = `
       query ($owner: String!, $repo: String!, $id: Int!) {
         repository(owner: $owner, name: $repo) {
           id
@@ -129,20 +119,19 @@ class discussionToMarkdown {
         }
       }
     `;
-            const data = yield graphqlWithAuth(graphqlQuery, {
-                owner,
-                repo,
-                id
-            });
-            if (!data.errors) {
-                // eslint-disable-next-line no-console
-                console.log(data);
-                return data;
-            }
-            else {
-                throw new Error(data.errors[0].message);
-            }
+        const data = graphqlWithAuth(graphqlQuery, {
+            owner,
+            repo,
+            id
         });
+        if (!data.errors) {
+            // eslint-disable-next-line no-console
+            console.log(data);
+            return data;
+        }
+        else {
+            throw new Error(data.errors[0].message);
+        }
     }
     // Generate the Markdown
     generateMarkdown(data) {

@@ -21,8 +21,7 @@ export default class discussionToMarkdown {
     const url: DiscussionURL = this.parseDiscussionURL(this.discussion_url)
 
     // Query the discussion's content
-    const data: Promise<GraphQlQueryResponseData> =
-      this.getDiscussionContent(url)
+    const data: GraphQlQueryResponseData = this.getDiscussionContent(url)
 
     // Generate the Markdown
     const output: string = this.generateMarkdown(data)
@@ -52,9 +51,7 @@ export default class discussionToMarkdown {
   }
 
   // Get the discussion's content
-  async getDiscussionContent(
-    url: DiscussionURL
-  ): Promise<GraphQlQueryResponseData> {
+  getDiscussionContent(url: DiscussionURL): GraphQlQueryResponseData {
     const owner = url.owner
     const repo = url.repo
     const id = url.id
@@ -104,7 +101,7 @@ export default class discussionToMarkdown {
         }
       }
     `
-    const data: GraphQlQueryResponseData = await graphqlWithAuth(graphqlQuery, {
+    const data: GraphQlQueryResponseData = graphqlWithAuth(graphqlQuery, {
       owner,
       repo,
       id
