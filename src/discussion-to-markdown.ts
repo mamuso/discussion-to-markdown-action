@@ -72,7 +72,7 @@ export default class discussionToMarkdown {
       query ($owner: String!, $repo: String!, $id: Int!) {
         repository(owner: $owner, name: $repo) {
           id
-          discussion(number: $discussion_number) {
+          discussion(number: $id) {
             id
             title
             createdAt
@@ -111,6 +111,8 @@ export default class discussionToMarkdown {
     })
 
     if (!data.errors) {
+      // eslint-disable-next-line no-console
+      console.log(data)
       return data
     } else {
       throw new Error(data.errors[0].message)
