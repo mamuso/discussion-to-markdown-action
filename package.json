@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": false,
   "description": "Grab a GitHub discussion URL and return the contents as markdown",
-  "main": "lib/main.js",
+  "main": "lib/src/main.js",
   "scripts": {
     "build": "tsc",
     "format": "prettier --write '**/*.ts'",
