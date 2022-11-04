@@ -1,3 +1,4 @@
 import discussionToMarkdown from './discussion-to-markdown'
 
-new discussionToMarkdown()
+const dtm = new discussionToMarkdown()
+dtm.run()

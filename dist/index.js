@@ -194,7 +194,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const discussion_to_markdown_1 = __importDefault(__nccwpck_require__(2941));
-new discussion_to_markdown_1.default();
+const dtm = new discussion_to_markdown_1.default();
+dtm.run();
 
 
 /***/ }),
