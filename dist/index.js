@@ -158,9 +158,7 @@ class discussionToMarkdown {
     // Generate the Markdown
     generateMarkdown(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            // eslint-disable-next-line no-console
-            console.log(data);
-            const discussion = data.data.repository.discussion;
+            const discussion = data.repository.discussion;
             // shape the markdown
             let md = `# ${discussion.title}\n`;
             md += `from ${discussion.author.login} on ${discussion.createdAt}\n\n`;
