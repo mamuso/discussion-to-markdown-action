@@ -16,19 +16,31 @@ export default class discussionToMarkdown {
     // Get the discussion URL and token from the action's input
     this.discussion_url = core.getInput('discussion-url', {required: true})
     this.token = core.getInput('token', {required: true})
+  }
 
-    // Parse the discussion URL
-    const url: DiscussionURL = this.parseDiscussionURL(this.discussion_url)
+  // Trigger the action
+  async run(): Promise<void> {
+    try {
+      // Parse the discussion URL
+      const url: DiscussionURL = this.parseDiscussionURL(this.discussion_url)
 
-    // Query the discussion's content
-    const data: GraphQlQueryResponseData = this.getDiscussionContent(url)
+      // Query the discussion's content
+      const data: GraphQlQueryResponseData = await this.getDiscussionContent(
+        url
+      )
 
-    // Generate the Markdown
-    const output: string = this.generateMarkdown(data)
+      // Generate the Markdown
+      const output: string = await this.generateMarkdown(data)
 
-    // Deliver the output
-    core.setOutput('markdown', output)
-    core.summary.addRaw(output).write()
+      // Deliver the output
+      core.setOutput('markdown', output)
+      core.summary.addRaw(output).write()
+    } catch (error) {
+      if (error instanceof Error) {
+        core.setFailed(error.message)
+      }
+      throw error
+    }
   }
 
   // Parse the discussion URL
@@ -51,7 +63,9 @@ export default class discussionToMarkdown {
   }
 
   // Get the discussion's content
-  getDiscussionContent(url: DiscussionURL): GraphQlQueryResponseData {
+  async getDiscussionContent(
+    url: DiscussionURL
+  ): Promise<GraphQlQueryResponseData> {
     const owner = url.owner
     const repo = url.repo
     const id = url.id
@@ -101,15 +115,13 @@ export default class discussionToMarkdown {
         }
       }
     `
-    const data: GraphQlQueryResponseData = graphqlWithAuth(graphqlQuery, {
+    const data: GraphQlQueryResponseData = await graphqlWithAuth(graphqlQuery, {
       owner,
       repo,
       id
     })
 
     if (!data.errors) {
-      // eslint-disable-next-line no-console
-      console.log(data)
       return data
     } else {
       throw new Error(data.errors[0].message)
@@ -117,10 +129,8 @@ export default class discussionToMarkdown {
   }
 
   // Generate the Markdown
-  generateMarkdown(data: GraphQlQueryResponseData): string {
-    // eslint-disable-next-line no-console
-    console.log(data)
-    const discussion = data.repository.discussion
+  async generateMarkdown(data: GraphQlQueryResponseData): Promise<string> {
+    const discussion = data.data.repository.discussion
     // shape the markdown
     let md = `# ${discussion.title}\n`
     md += `from ${discussion.author.login} on ${discussion.createdAt}\n\n`
@@ -128,11 +138,11 @@ export default class discussionToMarkdown {
     md += `---\n\n`
 
     for (const comment of discussion.comments.nodes) {
-      md += `## ${comment.author.login} on ${comment.createdAt}\n\n`
+      md += `## Reply from ${comment.author.login} on ${comment.createdAt}\n\n`
       md += `${NodeHtmlMarkdown.translate(comment.bodyHTML)}\n\n`
       md += `---\n\n`
       for (const replies of comment.replies.nodes) {
-        md += `### ${replies.author.login} on ${replies.createdAt}\n\n`
+        md += `### Reply from ${replies.author.login} on ${replies.createdAt}\n\n`
         md += `${NodeHtmlMarkdown.translate(replies.bodyHTML)}\n\n`
         md += `---\n\n`
       }

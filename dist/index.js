@@ -29,6 +29,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 //
 //  discussion-to-markdown.ts
@@ -42,15 +51,28 @@ class discussionToMarkdown {
         // Get the discussion URL and token from the action's input
         this.discussion_url = core.getInput('discussion-url', { required: true });
         this.token = core.getInput('token', { required: true });
-        // Parse the discussion URL
-        const url = this.parseDiscussionURL(this.discussion_url);
-        // Query the discussion's content
-        const data = this.getDiscussionContent(url);
-        // Generate the Markdown
-        const output = this.generateMarkdown(data);
-        // Deliver the output
-        core.setOutput('markdown', output);
-        core.summary.addRaw(output).write();
+    }
+    // Trigger the action
+    run() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // Parse the discussion URL
+                const url = this.parseDiscussionURL(this.discussion_url);
+                // Query the discussion's content
+                const data = yield this.getDiscussionContent(url);
+                // Generate the Markdown
+                const output = yield this.generateMarkdown(data);
+                // Deliver the output
+                core.setOutput('markdown', output);
+                core.summary.addRaw(output).write();
+            }
+            catch (error) {
+                if (error instanceof Error) {
+                    core.setFailed(error.message);
+                }
+                throw error;
+            }
+        });
     }
     // Parse the discussion URL
     parseDiscussionURL(discussion_url) {
@@ -72,18 +94,19 @@ class discussionToMarkdown {
     }
     // Get the discussion's content
     getDiscussionContent(url) {
-        const owner = url.owner;
-        const repo = url.repo;
-        const id = url.id;
-        // Initiazlize the GraphQL client
-        const graphqlWithAuth = graphql_1.graphql.defaults({
-            headers: {
-                authorization: `token ${this.token}`
-            }
-        });
-        // Query to get discussion's content
-        // https://docs.github.com/en/graphql/overview/explorer
-        const graphqlQuery = `
+        return __awaiter(this, void 0, void 0, function* () {
+            const owner = url.owner;
+            const repo = url.repo;
+            const id = url.id;
+            // Initiazlize the GraphQL client
+            const graphqlWithAuth = graphql_1.graphql.defaults({
+                headers: {
+                    authorization: `token ${this.token}`
+                }
+            });
+            // Query to get discussion's content
+            // https://docs.github.com/en/graphql/overview/explorer
+            const graphqlQuery = `
       query ($owner: String!, $repo: String!, $id: Int!) {
         repository(owner: $owner, name: $repo) {
           id
@@ -119,42 +142,41 @@ class discussionToMarkdown {
         }
       }
     `;
-        const data = graphqlWithAuth(graphqlQuery, {
-            owner,
-            repo,
-            id
+            const data = yield graphqlWithAuth(graphqlQuery, {
+                owner,
+                repo,
+                id
+            });
+            if (!data.errors) {
+                return data;
+            }
+            else {
+                throw new Error(data.errors[0].message);
+            }
         });
-        if (!data.errors) {
-            // eslint-disable-next-line no-console
-            console.log(data);
-            return data;
-        }
-        else {
-            throw new Error(data.errors[0].message);
-        }
     }
     // Generate the Markdown
     generateMarkdown(data) {
-        // eslint-disable-next-line no-console
-        console.log(data);
-        const discussion = data.repository.discussion;
-        // shape the markdown
-        let md = `# ${discussion.title}\n`;
-        md += `from ${discussion.author.login} on ${discussion.createdAt}\n\n`;
-        md += `${node_html_markdown_1.NodeHtmlMarkdown.translate(discussion.bodyHTML)}\n\n`;
-        md += `---\n\n`;
-        for (const comment of discussion.comments.nodes) {
-            md += `## ${comment.author.login} on ${comment.createdAt}\n\n`;
-            md += `${node_html_markdown_1.NodeHtmlMarkdown.translate(comment.bodyHTML)}\n\n`;
+        return __awaiter(this, void 0, void 0, function* () {
+            const discussion = data.data.repository.discussion;
+            // shape the markdown
+            let md = `# ${discussion.title}\n`;
+            md += `from ${discussion.author.login} on ${discussion.createdAt}\n\n`;
+            md += `${node_html_markdown_1.NodeHtmlMarkdown.translate(discussion.bodyHTML)}\n\n`;
             md += `---\n\n`;
-            for (const replies of comment.replies.nodes) {
-                md += `### ${replies.author.login} on ${replies.createdAt}\n\n`;
-                md += `${node_html_markdown_1.NodeHtmlMarkdown.translate(replies.bodyHTML)}\n\n`;
+            for (const comment of discussion.comments.nodes) {
+                md += `## Reply from ${comment.author.login} on ${comment.createdAt}\n\n`;
+                md += `${node_html_markdown_1.NodeHtmlMarkdown.translate(comment.bodyHTML)}\n\n`;
                 md += `---\n\n`;
+                for (const replies of comment.replies.nodes) {
+                    md += `### Reply from ${replies.author.login} on ${replies.createdAt}\n\n`;
+                    md += `${node_html_markdown_1.NodeHtmlMarkdown.translate(replies.bodyHTML)}\n\n`;
+                    md += `---\n\n`;
+                }
             }
-        }
-        md += `[Discussion link](${this.discussion_url})`;
-        return md;
+            md += `[Discussion link](${this.discussion_url})`;
+            return md;
+        });
     }
 }
 exports["default"] = discussionToMarkdown;

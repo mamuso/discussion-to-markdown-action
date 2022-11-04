@@ -1,4 +1,6 @@
 import * as process from 'process'
+import fs from 'fs'
+import path from 'path'
 import {mockDiscussion, mockDiscussionNotFound} from './mocks'
 import discussionToMarkdown from '../src/discussion-to-markdown'
 import {GraphQlQueryResponseData} from '@octokit/graphql'
@@ -11,9 +13,19 @@ const not_a_discussion_url: string =
 const discussion_broken_url: string = 'patata'
 const token: string = 'abcdefg123456'
 
+const testDirectoryPath = path.join(__dirname, 'test')
+const testFilePath = path.join(testDirectoryPath, 'test-summary.md')
+
 describe('DiscussionToMarkdown test suite', () => {
-  afterEach(() => {
-    // restore the spy created with spyOn
+  beforeEach(async () => {
+    process.env['SUMMARY_ENV_VAR'] = testFilePath
+    process.env['GITHUB_STEP_SUMMARY'] = '/dev/null'
+    await fs.promises.mkdir(testDirectoryPath, {recursive: true})
+    await fs.promises.writeFile(testFilePath, '', {encoding: 'utf8'})
+  })
+
+  afterAll(async () => {
+    await fs.promises.unlink(testFilePath)
     jest.restoreAllMocks()
   })
 
@@ -27,6 +39,7 @@ describe('DiscussionToMarkdown test suite', () => {
   it('it needs a token', async () => {
     // Define inputs
     process.env['INPUT_DISCUSSION-URL'] = discussion_url
+
     expect(() => {
       new discussionToMarkdown()
     }).toThrow('Input required and not supplied: token')
@@ -36,20 +49,25 @@ describe('DiscussionToMarkdown test suite', () => {
     // Define inputs
     process.env['INPUT_DISCUSSION-URL'] = discussion_broken_url
     process.env['INPUT_TOKEN'] = token
-
-    expect(() => {
-      new discussionToMarkdown()
-    }).toThrow('Invalid URL')
+    const dtm = new discussionToMarkdown()
+    try {
+      await dtm.run()
+    } catch (e) {
+      expect(`${e}`).toBe('TypeError [ERR_INVALID_URL]: Invalid URL')
+    }
   })
 
   it('it needs a GitHub discussions URL', async () => {
     // Define inputs
     process.env['INPUT_DISCUSSION-URL'] = not_a_discussion_url
     process.env['INPUT_TOKEN'] = token
+    const dtm = new discussionToMarkdown()
 
-    expect(() => {
-      new discussionToMarkdown()
-    }).toThrow('Invalid GitHub Discussions URL')
+    try {
+      await dtm.run()
+    } catch (e) {
+      expect(`${e}`).toBe('Error: Invalid GitHub Discussions URL')
+    }
   })
 
   it("it fails if the discussion doesn't exist", async () => {
@@ -69,9 +87,15 @@ describe('DiscussionToMarkdown test suite', () => {
         }
       })
 
-    expect(() => {
-      new discussionToMarkdown()
-    }).toThrow('Could not resolve to a Discussion with the number of 1.')
+    const dtm = new discussionToMarkdown()
+
+    try {
+      await dtm.run()
+    } catch (e) {
+      expect(`${e}`).toBe(
+        'Error: Could not resolve to a Discussion with the number of 1.'
+      )
+    }
   })
 
   it('it works', async () => {
@@ -91,8 +115,14 @@ describe('DiscussionToMarkdown test suite', () => {
         }
       })
 
-    expect(() => {
-      new discussionToMarkdown()
-    }).not.toThrow()
+    const dtm = new discussionToMarkdown()
+
+    try {
+      await dtm.run()
+    } catch (e) {
+      expect(`${e}`).toBe(
+        'Error: Could not resolve to a Discussion with the number of 1.'
+      )
+    }
   })
 })
