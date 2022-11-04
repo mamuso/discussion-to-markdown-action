@@ -130,6 +130,8 @@ export default class discussionToMarkdown {
 
   // Generate the Markdown
   async generateMarkdown(data: GraphQlQueryResponseData): Promise<string> {
+    // eslint-disable-next-line no-console
+    console.log(data)
     const discussion = data.data.repository.discussion
     // shape the markdown
     let md = `# ${discussion.title}\n`
