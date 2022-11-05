@@ -1,4 +1,4 @@
-# GitHub Discussions to Markdown
+# GitHub Discussion to Markdown
 
 [![Build and Test](https://github.com/mamuso/discussion-to-markdown-actions/actions/workflows/test.yml/badge.svg)](https://github.com/mamuso/discussion-to-markdown-actions/actions/workflows/test.yml)
 
