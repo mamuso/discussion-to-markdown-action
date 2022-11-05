@@ -1,6 +1,6 @@
 # GitHub Discussions to Markdown
 
-<a href="https://github.com/mamuso/discussion-to-markdown-actions/actions"><img alt="typescript-action status" src="https://github.com/mamuso/discussion-to-markdown-actions/workflows/build-test/badge.svg"></a>
+[![Build and Test](https://github.com/mamuso/discussion-to-markdown-actions/actions/workflows/test.yml/badge.svg)](https://github.com/mamuso/discussion-to-markdown-actions/actions/workflows/test.yml)
 
 An action for transforming a GitHub Discussion into a markdown output.
 
