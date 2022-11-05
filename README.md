@@ -33,6 +33,8 @@ jobs:
 
 If you are planning to capture a discussion from the same repository, you can use the default `GITHUB_TOKEN` secret (`token: ${{ secrets.GITHUB_TOKEN }}`). Otherwise, you will need to create a [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) and add it to the repository secrets as `TOKEN`.
 
+If you are planning to capture discussions from a private repository, you may want to execute this action in a private repo too.
+
 ## What to expect
 
 Once you have the workflow in your repository, you can trigger it by going to the Actions tab and:
