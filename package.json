@@ -1,5 +1,5 @@
 {
-  "name": "actions-discussion-to-markdown",
+  "name": "discussion-to-markdown-action",
   "version": "0.0.1",
   "private": false,
   "description": "Grab a GitHub discussion URL and return the contents as markdown",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mamuso/actions-discussion-to-markdown.git"
+    "url": "git+https://github.com/mamuso/discussion-to-markdown-action.git"
   },
   "keywords": [
     "actions",
