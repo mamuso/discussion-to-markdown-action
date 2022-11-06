@@ -1,4 +1,4 @@
-name: 'actions-discussion-to-markdown'
+name: 'discussion-to-markdown-action'
 description: 'Grab a GitHub discussion URL and return the contents as markdown'
 author: 'mamuso <mamuso@mamuso.net>'
 inputs:
