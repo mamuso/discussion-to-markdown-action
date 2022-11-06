@@ -1,6 +1,6 @@
 # GitHub Discussion to Markdown
 
-[![Build and Test](https://github.com/mamuso/discussion-to-markdown-actions/actions/workflows/test.yml/badge.svg)](https://github.com/mamuso/discussion-to-markdown-actions/actions/workflows/test.yml)
+[![Build and Test](https://github.com/mamuso/discussion-to-markdown-action/actions/workflows/test.yml/badge.svg)](https://github.com/mamuso/discussion-to-markdown-action/actions/workflows/test.yml)
 
 An action for transforming a GitHub Discussion into a markdown output.
 
@@ -25,7 +25,7 @@ jobs:
     name: Discussion to Markdown
     runs-on: ubuntu-latest
     steps:
-      - uses: mamuso/discussion-to-markdown-actions@main
+      - uses: mamuso/discussion-to-markdown-action@main
         with:
           discussion-url: ${{ github.event.inputs.discussion-url }}
           token: ${{ secrets.TOKEN }}
