@@ -29,7 +29,6 @@ describe('DiscussionToMarkdown test suite', () => {
     jest.restoreAllMocks()
   })
 
-  beforeEach(() => {})
   it('it needs a discussion_url', async () => {
     expect(() => {
       new discussionToMarkdown()
