@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import {mockDiscussion, mockDiscussionNotFound} from './mocks'
 import discussionToMarkdown from '../src/discussion-to-markdown'
-import {GraphQlQueryResponseData} from '@octokit/graphql'
+import type {GraphQlQueryResponseData} from '@octokit/graphql'
 
 // Constants
 const discussion_url: string =
