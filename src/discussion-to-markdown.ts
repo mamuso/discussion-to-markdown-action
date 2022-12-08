@@ -5,7 +5,6 @@ import * as core from '@actions/core'
 import {graphql} from '@octokit/graphql'
 import type {DiscussionURL} from './types'
 import type {GraphQlQueryResponseData} from '@octokit/graphql'
-import {NodeHtmlMarkdown} from 'node-html-markdown'
 
 export default class discussionToMarkdown {
   discussion_url: string
@@ -87,7 +86,7 @@ export default class discussionToMarkdown {
             id
             title
             createdAt
-            bodyHTML
+            body
             author {
               login
             }
@@ -95,7 +94,7 @@ export default class discussionToMarkdown {
               nodes {
                 id
                 createdAt
-                bodyHTML
+                body
                 author {
                   login
                 }
@@ -103,7 +102,7 @@ export default class discussionToMarkdown {
                   nodes {
                     id
                     createdAt
-                    bodyHTML
+                    body
                     author {
                       login
                     }
@@ -134,16 +133,16 @@ export default class discussionToMarkdown {
     // shape the markdown
     let md = `# ${discussion.title}\n`
     md += `from ${discussion.author.login} on ${discussion.createdAt}\n\n`
-    md += `${NodeHtmlMarkdown.translate(discussion.bodyHTML)}\n\n`
+    md += `${discussion.body}\n\n`
     md += `---\n\n`
 
     for (const comment of discussion.comments.nodes) {
       md += `## Reply from ${comment.author.login} on ${comment.createdAt}\n\n`
-      md += `${NodeHtmlMarkdown.translate(comment.bodyHTML)}\n\n`
+      md += `${comment.body}\n\n`
       md += `---\n\n`
       for (const replies of comment.replies.nodes) {
         md += `### Reply from ${replies.author.login} on ${replies.createdAt}\n\n`
-        md += `${NodeHtmlMarkdown.translate(replies.bodyHTML)}\n\n`
+        md += `${replies.body}\n\n`
         md += `---\n\n`
       }
     }
